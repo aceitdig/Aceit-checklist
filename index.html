@@ -68,6 +68,30 @@
   .cta-note{text-align:center;font-size:14px;color:#C9D4E0;margin:12px 0 0}
   .reset{display:block;margin:18px auto 0;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font:inherit;font-size:14px;font-weight:600;padding:10px 18px;border-radius:99px;cursor:pointer;min-height:44px}
 
+  .send{margin-top:32px;background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:28px 24px}
+  .send h2{font-size:22px;margin:0 0 8px;color:var(--navy)}
+  .send-lead{margin:0 0 18px;color:var(--muted)}
+  .preview{margin:0 0 22px}
+  .preview .risk{border-left:4px solid var(--gold-deep);background:var(--bg);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .preview .risk b{display:block;color:var(--navy);font-size:15px}
+  .preview .risk span{font-size:14px;color:var(--muted)}
+  .preview .more{font-size:14px;font-weight:700;color:var(--navy-2);margin:6px 0 0}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:560px){.row{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .field label{font-size:14px;font-weight:700;color:var(--navy)}
+  .field input{font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid #B8C4D0;border-radius:10px;min-height:44px}
+  .field input:focus{outline:3px solid var(--navy-2);outline-offset:1px;border-color:var(--navy-2)}
+  .consent{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink);margin:4px 0 18px;cursor:pointer}
+  .consent input{width:22px;height:22px;flex:0 0 22px;margin:1px 0 0;accent-color:var(--navy)}
+  .submit{width:100%;font:inherit;font-size:17px;font-weight:800;background:var(--navy);color:#fff;border:none;border-radius:999px;padding:16px 20px;cursor:pointer;min-height:44px}
+  .submit:hover{background:var(--navy-2)}
+  .submit:disabled{opacity:.6;cursor:default}
+  .form-msg{margin:14px 0 0;font-weight:700;font-size:15px}
+  .form-msg.ok{color:var(--green)}
+  .form-msg.err{color:var(--red)}
+  .privacy{font-size:12px;color:var(--muted);margin:14px 0 0}
+
   .how{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
   .how h2{font-size:20px;margin:0 0 14px;color:var(--navy)}
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0;padding:0;list-style:none}
@@ -111,6 +135,35 @@
       <a class="cta" id="cta" href="https://calendar.app.google/f6eCZLWqN6R1tPS3A">Book your free 20-minute discovery call</a>
       <p class="cta-note">Bring your score. We'll show you which gap is costing you the most and what fixing it looks like.</p>
       <button class="reset" type="button" id="reset">Start over</button>
+    </section>
+
+    <section class="send" id="send">
+      <h2>Get your results and personal risk register by email</h2>
+      <p class="send-lead">We'll turn every box you didn't tick into a risk, with its business impact and a quick fix you can start this week.</p>
+      <div class="preview" id="preview"></div>
+      <form id="sendForm" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="fName">First name</label>
+            <input id="fName" name="firstName" type="text" autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="fEmail">Work email</label>
+            <input id="fEmail" name="email" type="email" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fCompany">Organization (optional)</label>
+          <input id="fCompany" name="company" type="text" autocomplete="organization">
+        </div>
+        <label class="consent" for="fConsent">
+          <input id="fConsent" type="checkbox">
+          <span>Yes, also send me Aceit Digital's short follow-up emails with practical fixes and a free risk register template. I can unsubscribe at any time.</span>
+        </label>
+        <button class="submit" type="submit" id="sendBtn">Email me my results</button>
+        <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+        <p class="privacy">We use your details only to send your results and, if you opt in, our follow-up emails. Aceit Digital Inc., Calgary, Alberta · support@aceitdigital.com</p>
+      </form>
     </section>
 
     <section class="how">
@@ -172,6 +225,33 @@
       "New tools and processes come with training, not just an announcement.",
       "We have a written playbook for how work gets done, and people actually use it."
     ]}
+  ];
+
+  // Paste the Google Apps Script web app URL here (see SETUP.md).
+  var RELAY_URL = "";
+
+  // One risk row per question, in the same order as the questions above.
+  var RISKS = [
+    ["Meetings run without a clear purpose", "Time is spent without progress, and people attend just in case.", "No agenda 24 hours before means no meeting."],
+    ["Meetings end without decisions or owners", "Work stalls and the same topics come back every week.", "Close every meeting by reading out the decision, the owner and the deadline."],
+    ["Leaders are stuck in meetings", "No time is left for strategy, coaching or customers.", "Audit one week of calendars and cancel or shorten 20% of recurring meetings."],
+    ["Some voices are not heard", "Problems are spotted but never raised, and good ideas are lost.", "Share the agenda in writing ahead of time and rotate who speaks first."],
+    ["Decisions live only in people's memories", "Teams act on different versions of the same meeting.", "Send a three-line written recap within 24 hours."],
+    ["Every team reports differently", "Leaders cannot compare progress or spot problems early.", "Adopt one one-page status template for every team."],
+    ["Project status is scattered across spreadsheets", "Nobody knows which version is current.", "Choose one tool as the single source of truth and retire side spreadsheets."],
+    ["The tracking tool is out of date", "Reports and reality drift apart.", "Make the weekly update part of the stand-up, not an extra task."],
+    ["Status is based on opinion, not data", "Problems stay hidden until deadlines are missed.", "Define what green, amber and red mean with measurable criteria."],
+    ["Leaders cannot see real status quickly", "Decisions are delayed and more meetings get booked.", "Build a simple dashboard from your single source of truth."],
+    ["Work has no single owner", "Everyone assumes someone else is handling it.", "Name one owner for every project and deliverable."],
+    ["Key roles have no backup", "One absence can stop delivery.", "Name a backup for every critical role and pair them monthly."],
+    ["Work stops when people are away", "Sick days and vacations turn into missed deadlines.", "Require a short handover before any planned absence."],
+    ["Time off is not planned around deadlines", "Critical weeks run short-staffed.", "Keep one shared calendar that shows launches and time off together."],
+    ["Critical knowledge sits in one person's head", "Turnover or illness causes rework and delays.", "Write short how-to notes for your five most critical tasks."],
+    ["“Done” means different things to different people", "Work is reported as finished but is not usable.", "Write a one-line definition of done for each type of work."],
+    ["Work stays “almost done”", "Value reaches customers late, if at all.", "Break work into pieces that can be finished within a week."],
+    ["Departments work in silos", "Good practices do not spread, and teams compete instead of cooperating.", "Hold a monthly 30-minute cross-team show-and-tell."],
+    ["New tools arrive without training", "Adoption stays low and people fall back to old habits.", "Pair every new tool or process with a short hands-on session."],
+    ["There is no shared playbook", "Quality depends on who happens to do the work.", "Start a living playbook with your ten most common processes."]
   ];
 
   var WEAK_TIPS = {
@@ -243,7 +323,88 @@
     var weak = document.getElementById("weak");
     if (total === 20){ weak.textContent = "No gaps found. Want a second opinion before your next board review? Book a call anyway."; }
     else { weak.textContent = WEAK_TIPS[key] + " That is where to start."; }
+
+    STATE = { score: total, band: band, weakest: total === 20 ? "None" : key, counts: counts };
+    renderPreview();
   }
+
+  var STATE = {};
+
+  function openRisks(){
+    var rows = [];
+    form.querySelectorAll("input[type=checkbox]").forEach(function(b, i){
+      if (!b.checked){
+        var g = GROUPS[+b.dataset.group];
+        rows.push({ area: g.short || g.name, risk: RISKS[i][0], impact: RISKS[i][1], fix: RISKS[i][2] });
+      }
+    });
+    return rows;
+  }
+
+  function renderPreview(){
+    var box = document.getElementById("preview");
+    box.textContent = "";
+    var rows = openRisks();
+    if (!rows.length){
+      var p = document.createElement("p"); p.className = "more";
+      p.textContent = "No open risks. We'll still send your score and our register template.";
+      box.appendChild(p); return;
+    }
+    rows.slice(0, 2).forEach(function(r){
+      var d = document.createElement("div"); d.className = "risk";
+      var b = document.createElement("b"); b.textContent = r.risk;
+      var s = document.createElement("span"); s.textContent = "Quick fix: " + r.fix;
+      d.appendChild(b); d.appendChild(s); box.appendChild(d);
+    });
+    if (rows.length > 2){
+      var m = document.createElement("p"); m.className = "more";
+      m.textContent = "+ " + (rows.length - 2) + " more risk" + (rows.length - 2 === 1 ? "" : "s") + " in your full register";
+      box.appendChild(m);
+    }
+  }
+
+  document.getElementById("sendForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("formMsg");
+    var btn = document.getElementById("sendBtn");
+    var name = document.getElementById("fName").value.trim();
+    var email = document.getElementById("fEmail").value.trim();
+    msg.className = "form-msg";
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      msg.className = "form-msg err";
+      msg.textContent = "Please enter your first name and a valid email.";
+      return;
+    }
+    if (!RELAY_URL){
+      msg.className = "form-msg err";
+      msg.textContent = "Email delivery is being set up. Please email support@aceitdigital.com for your results.";
+      return;
+    }
+    var payload = {
+      firstName: name,
+      email: email,
+      company: document.getElementById("fCompany").value.trim(),
+      consent: document.getElementById("fConsent").checked,
+      score: STATE.score,
+      band: STATE.band,
+      weakest: STATE.weakest,
+      areas: GROUPS.map(function(g, gi){ return { area: g.short || g.name, score: STATE.counts[gi] }; }),
+      risks: openRisks(),
+      page: location.href
+    };
+    btn.disabled = true; btn.textContent = "Sending...";
+    fetch(RELAY_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) })
+      .then(function(){
+        msg.className = "form-msg ok";
+        msg.textContent = "Sent! Check your inbox in the next few minutes (and your spam folder, just in case).";
+        btn.textContent = "Sent";
+      })
+      .catch(function(){
+        msg.className = "form-msg err";
+        msg.textContent = "Something went wrong. Please try again, or email support@aceitdigital.com.";
+        btn.disabled = false; btn.textContent = "Email me my results";
+      });
+  });
 
   document.getElementById("reset").addEventListener("click", function(){
     form.querySelectorAll("input[type=checkbox]").forEach(function(b){ b.checked = false; });

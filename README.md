@@ -16,12 +16,16 @@ Part of the "Right People, Wrong Systems" AI mini-series campaign. Viewers who c
 | `favicon-32.png`, `apple-touch-icon.png` | Browser tab and home-screen icons |
 | `aceit-logo-white.png`, `aceit-icon.png` | Aceit Digital logos |
 | `CNAME` | Connects the site to checklist.aceitdigital.ca (do not delete) |
+| `apps-script/Code.gs` | Google Apps Script that emails results, alerts you, logs leads and adds opted-in leads to SwipeOne |
+| `SETUP.md` | Step-by-step setup for the email results flow |
 
 ## Common edits
 
 - **Booking link:** in `index.html`, search for `calendar.app.google` (3 places).
 - **Questions:** in `index.html`, edit the `GROUPS` list in the script near the bottom.
 - **Score bands:** in `index.html`, search for `Truly green`.
+- **Risk register wording:** in `index.html`, edit the `RISKS` list (one row per question, same order).
+- **Email relay URL:** in `index.html`, `RELAY_URL` (see SETUP.md).
 
 Changes pushed to `main` go live in about a minute.
 
