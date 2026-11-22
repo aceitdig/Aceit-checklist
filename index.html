@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is Your Green Report Lying? | Aceit Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#22384F; --navy-2:#3D6184; --gold:#F2D66B; --gold-deep:#A8801F;
+    --ink:#1B2A3A; --muted:#55657A; --bg:#F5F7FA; --card:#FFFFFF; --line:#DDE3EA;
+    --green:#1F7A4D; --amber:#9A6A00; --red:#B3261E;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Montserrat,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+  a{color:var(--navy-2)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+  header{background:var(--navy);color:#fff;padding:36px 0 44px}
+  header img{width:190px;height:auto;display:block;margin-bottom:28px}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:3px;color:var(--gold);margin:0 0 10px;text-transform:uppercase}
+  h1{font-size:clamp(30px,6vw,44px);line-height:1.1;margin:0 0 16px;font-weight:800}
+  header p.lead{margin:0;font-size:17px;color:#E6ECF2;max-width:600px}
+
+  main{padding:32px 0 140px}
+  .group{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px}
+  .group-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+  .group h2{font-size:20px;margin:0;color:var(--navy)}
+  .group .count{font-size:14px;font-weight:700;color:var(--muted);white-space:nowrap}
+  .item{display:flex;gap:14px;align-items:flex-start;padding:14px 4px;border-top:1px solid var(--line);cursor:pointer;min-height:44px}
+  .item:first-of-type{border-top:none}
+  .item input{appearance:none;-webkit-appearance:none;flex:0 0 26px;width:26px;height:26px;margin:1px 0 0;border:2px solid var(--navy-2);border-radius:7px;background:#fff;cursor:pointer;display:grid;place-content:center}
+  .item input::after{content:"";width:12px;height:7px;border-left:3px solid var(--navy);border-bottom:3px solid var(--navy);transform:rotate(-45deg) translate(1px,-2px);opacity:0}
+  .item input:checked{background:var(--gold);border-color:var(--gold-deep)}
+  .item input:checked::after{opacity:1}
+  .item input:focus-visible{outline:3px solid var(--navy-2);outline-offset:2px}
+  .item span{font-size:16px}
+
+  .result{background:var(--navy);color:#fff;border-radius:20px;padding:32px 26px;margin-top:32px}
+  .result .eyebrow{margin-bottom:6px}
+  .score{font-size:64px;font-weight:800;line-height:1;margin:0}
+  .score small{font-size:24px;font-weight:600;color:#C9D4E0}
+  .band{font-size:24px;font-weight:800;margin:14px 0 6px;color:var(--gold)}
+  .band-text{margin:0 0 24px;color:#E6ECF2}
+  .bars{display:grid;gap:14px;margin:0 0 24px}
+  .bar-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:14px;font-weight:600}
+  .bar{grid-column:1 / -1;height:10px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--gold);border-radius:99px;transition:width .25s}
+  .weak{background:rgba(242,214,107,.12);border:1px solid rgba(242,214,107,.5);border-radius:12px;padding:14px 16px;margin:0 0 26px;font-size:15px}
+  .cta{display:block;text-align:center;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:800;font-size:18px;padding:18px 20px;border-radius:999px;min-height:44px}
+  .cta:hover{background:#F7E393}
+  .cta-note{text-align:center;font-size:14px;color:#C9D4E0;margin:12px 0 0}
+  .reset{display:block;margin:18px auto 0;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font:inherit;font-size:14px;font-weight:600;padding:10px 18px;border-radius:99px;cursor:pointer;min-height:44px}
+
+  .how{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .how h2{font-size:20px;margin:0 0 14px;color:var(--navy)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0;padding:0;list-style:none}
+  .steps li{background:var(--bg);border-radius:12px;padding:14px}
+  .steps b{display:block;color:var(--navy);font-size:15px}
+  .steps span{font-size:13px;color:var(--muted)}
+  @media (max-width:640px){.steps{grid-template-columns:1fr 1fr}}
+
+  footer{text-align:center;color:var(--muted);font-size:14px;padding:24px 0 8px}
+  footer img{width:44px;height:auto;display:block;margin:0 auto 10px}
+
+  .sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(20,40,60,.08)}
+  .sticky .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+  .sticky .s{font-weight:800;color:var(--navy);font-size:17px}
+  .sticky .s em{font-style:normal;font-weight:600;color:var(--muted);font-size:14px;display:block}
+  .sticky .btns{display:flex;gap:8px}
+  .sticky a{background:var(--navy);color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:12px 18px;border-radius:99px;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <img src="aceit-logo-white.png" alt="Aceit Digital Inc.">
+    <p class="eyebrow">Right People, Wrong Systems</p>
+    <h1>Is Your Green Report Lying?</h1>
+    <p class="lead">Your team says everything is on track, but deadlines slip and profit stalls. Tick every statement that is true for your organization today. Your score updates as you go.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <form id="quiz" onsubmit="return false"></form>
+
+    <section class="result" id="result" aria-live="polite">
+      <p class="eyebrow">Your score</p>
+      <p class="score"><span id="score">0</span><small> / 20</small></p>
+      <p class="band" id="band"></p>
+      <p class="band-text" id="bandText"></p>
+      <div class="bars" id="bars"></div>
+      <p class="weak" id="weak"></p>
+      <a class="cta" id="cta" href="https://calendar.app.google/f6eCZLWqN6R1tPS3A">Book your free 20-minute discovery call</a>
+      <p class="cta-note">Bring your score. We'll show you which gap is costing you the most and what fixing it looks like.</p>
+      <button class="reset" type="button" id="reset">Start over</button>
+    </section>
+
+    <section class="how">
+      <h2>How Aceit fixes the system</h2>
+      <ol class="steps">
+        <li><b>1. Observe</b><span>We sit in your meetings and watch how work really flows.</span></li>
+        <li><b>2. Diagnose</b><span>We show leaders and teams what is broken, without blame.</span></li>
+        <li><b>3. Train</b><span>We train your people on the new way of working.</span></li>
+        <li><b>4. Hand over</b><span>We leave a playbook your team owns.</span></li>
+      </ol>
+    </section>
+
+    <footer>
+      <img src="aceit-icon.png" alt="">
+      <p style="margin:0 0 4px"><b>Aceit Digital Inc.</b> · Calgary-based boutique consultancy</p>
+      <p style="margin:0">support@aceitdigital.com · (403) 912-5726</p>
+    </footer>
+  </div>
+</main>
+
+<div class="sticky" role="region" aria-label="Your score">
+  <div class="wrap">
+    <div class="s"><span id="stickyScore">0 / 20</span><em id="stickyBand">Tick what's true</em></div>
+    <div class="btns"><a href="#result">See my result</a>
+    <a href="https://calendar.app.google/f6eCZLWqN6R1tPS3A" style="background:var(--gold);color:var(--navy)">Book a call</a></div>
+  </div>
+</div>
+
+<script>
+  // Swap in the Google Calendar booking page link here.
+  var BOOKING_URL = "https://calendar.app.google/f6eCZLWqN6R1tPS3A";
+
+  var GROUPS = [
+    {name:"Meetings", items:[
+      "Every recurring meeting has a written agenda sent in advance.",
+      "Every meeting ends with a clear decision, an owner and a deadline.",
+      "Our leaders spend less than half their week in meetings.",
+      "Everyone gets a fair chance to speak, including quieter people and people working in a second language.",
+      "Key points are shared in writing after the meeting, so nobody depends on what they heard."
+    ]},
+    {name:"Reporting and a single source of truth", short:"Reporting", items:[
+      "All teams report progress in the same format.",
+      "We have one place where project status lives (a tool like Jira, Asana or Monday), not scattered spreadsheets.",
+      "That tool is updated at least weekly and matches what managers tell leadership.",
+      "When a report says “green”, it is backed by data, not opinion.",
+      "Leadership can see the real status of any project in under five minutes, without calling a meeting."
+    ]},
+    {name:"Ownership and coverage", short:"Ownership", items:[
+      "Every project and deliverable has one named owner.",
+      "Every key role has a named backup.",
+      "When someone is sick or on vacation, work continues without waiting for them to return.",
+      "Time off is planned around major deadlines, launches and board reviews.",
+      "Handover notes exist for critical tasks."
+    ]},
+    {name:"Delivery and teams", short:"Delivery", items:[
+      "Everyone on the team can explain what “done” means for their work.",
+      "Our delivery teams ship finished work every week, not “almost done” work.",
+      "Departments share what works with each other, instead of each believing its way is best.",
+      "New tools and processes come with training, not just an announcement.",
+      "We have a written playbook for how work gets done, and people actually use it."
+    ]}
+  ];
+
+  var WEAK_TIPS = {
+    "Meetings":"Your biggest gap is meetings. Time is being spent without decisions, and some voices aren't being heard.",
+    "Reporting":"Your biggest gap is reporting. Leadership is likely seeing several versions of the truth, which is how a red quarter hides behind green reports.",
+    "Ownership":"Your biggest gap is ownership and coverage. When one person is out, work stops, and nobody is clearly accountable.",
+    "Delivery":"Your biggest gap is delivery. Teams are busy, but finished work isn't shipping, and departments aren't learning from each other."
+  };
+
+  var form = document.getElementById("quiz");
+  var idx = 0;
+  GROUPS.forEach(function(g, gi){
+    var sec = document.createElement("section");
+    sec.className = "group";
+    var head = document.createElement("div");
+    head.className = "group-head";
+    var h = document.createElement("h2"); h.textContent = g.name;
+    var c = document.createElement("span"); c.className = "count"; c.id = "count" + gi; c.textContent = "0 / 5";
+    head.appendChild(h); head.appendChild(c); sec.appendChild(head);
+    g.items.forEach(function(text){
+      var id = "q" + (idx++);
+      var label = document.createElement("label");
+      label.className = "item"; label.setAttribute("for", id);
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.id = id; cb.dataset.group = gi;
+      cb.addEventListener("change", update);
+      var span = document.createElement("span"); span.textContent = text;
+      label.appendChild(cb); label.appendChild(span); sec.appendChild(label);
+    });
+    form.appendChild(sec);
+  });
+
+  var bars = document.getElementById("bars");
+  GROUPS.forEach(function(g, gi){
+    var row = document.createElement("div"); row.className = "bar-row";
+    row.innerHTML = '<span></span><span id="barN' + gi + '">0 / 5</span><div class="bar"><i id="bar' + gi + '" style="width:0%"></i></div>';
+    row.firstChild.textContent = g.name;
+    bars.appendChild(row);
+  });
+
+  document.getElementById("cta").href = BOOKING_URL;
+
+  function update(){
+    var counts = GROUPS.map(function(){return 0;});
+    var boxes = form.querySelectorAll("input[type=checkbox]");
+    var total = 0;
+    boxes.forEach(function(b){ if(b.checked){ total++; counts[+b.dataset.group]++; } });
+
+    counts.forEach(function(n, gi){
+      document.getElementById("count" + gi).textContent = n + " / 5";
+      document.getElementById("barN" + gi).textContent = n + " / 5";
+      document.getElementById("bar" + gi).style.width = (n * 20) + "%";
+    });
+
+    var band, text;
+    if (total >= 17){ band = "Truly green"; text = "Your systems support your people. Keep reviewing them every quarter so it stays that way."; }
+    else if (total >= 11){ band = "Hidden cracks"; text = "Things work, but they depend on heroics. One sick day or one busy month and deadlines slip."; }
+    else { band = "Your green report is lying"; text = "You likely have the right people working inside the wrong systems. This is fixable, usually faster than leaders expect."; }
+
+    document.getElementById("score").textContent = total;
+    document.getElementById("band").textContent = band;
+    document.getElementById("bandText").textContent = text;
+    document.getElementById("stickyScore").textContent = total + " / 20";
+    document.getElementById("stickyBand").textContent = band;
+
+    var min = Math.min.apply(null, counts);
+    var weakIdx = counts.indexOf(min);
+    var key = GROUPS[weakIdx].short || GROUPS[weakIdx].name;
+    var weak = document.getElementById("weak");
+    if (total === 20){ weak.textContent = "No gaps found. Want a second opinion before your next board review? Book a call anyway."; }
+    else { weak.textContent = WEAK_TIPS[key] + " That is where to start."; }
+  }
+
+  document.getElementById("reset").addEventListener("click", function(){
+    form.querySelectorAll("input[type=checkbox]").forEach(function(b){ b.checked = false; });
+    update();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  update();
+</script>
+</body>
+</html>
