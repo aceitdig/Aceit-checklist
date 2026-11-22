@@ -17,6 +17,7 @@ Part of the "Right People, Wrong Systems" AI mini-series campaign. Viewers who c
 | `aceit-logo-white.png`, `aceit-icon.png` | Aceit Digital logos |
 | `CNAME` | Connects the site to checklist.aceitdigital.ca (do not delete) |
 | `apps-script/Code.gs` | Google Apps Script that emails results, alerts you, logs leads and adds opted-in leads to SwipeOne |
+| `apps-script/Bookings.gs` | Tracks discovery call bookings and attendance, and tags SwipeOne contacts |
 | `SETUP.md` | Step-by-step setup for the email results flow |
 
 ## Common edits

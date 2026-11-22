@@ -258,11 +258,9 @@ function getSheet_() {
 
 /** Adds or updates the contact in SwipeOne. Tagging green_report_lead starts the follow-up series. */
 function pushToSwipeOne_(d) {
-  const key = PropertiesService.getScriptProperties().getProperty('SWIPEONE_API_KEY');
-  if (!key) return 'skipped (no SWIPEONE_API_KEY)';
   const tags = ['green_report_lead', BAND_TAG[d.band]];
   if (WEAK_TAG[d.weakest]) tags.push(WEAK_TAG[d.weakest]);
-  const body = {
+  return swipeOneUpsert_({
     email: d.email,
     firstName: d.firstName,
     business_name: d.company,
@@ -270,7 +268,13 @@ function pushToSwipeOne_(d) {
     assessment_segment: d.band,
     assessment_primary_risk: d.weakest,
     tags: tags.join(',')
-  };
+  });
+}
+
+/** Creates or updates a SwipeOne contact. Tags in a comma-separated string are added. */
+function swipeOneUpsert_(body) {
+  const key = PropertiesService.getScriptProperties().getProperty('SWIPEONE_API_KEY');
+  if (!key) return 'skipped (no SWIPEONE_API_KEY)';
   const res = UrlFetchApp.fetch(CONFIG.SWIPEONE_URL, {
     method: 'post',
     contentType: 'application/json',
